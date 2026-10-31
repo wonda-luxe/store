@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wonda Luxe | Luxury Cosmetics & Fragrances</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo">Wonda <span>Luxe</span></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="cart-btn" onclick="openCart()">
+        🛒 Cart <span class="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Discover Luxury Beauty</h1>
+    <p>Premium cosmetics, skincare, and fragrances curated for the modern woman. Shop exclusive products and checkout seamlessly via WhatsApp.</p>
+    <a href="shop.html" class="btn-primary">Shop Now</a>
+  </section>
+
+  <section class="container">
+    <h2 class="section-title">Featured Products</h2>
+    <div class="products-grid" id="featured-products"></div>
+  </section>
+
+  <footer id="contact">
+    <p>&copy; 2026 Wonda Luxe. All rights reserved.</p>
+    <p>WhatsApp: 08064674290</p>
+    <p>Abuja, Nigeria</p>
+  </footer>
+
+  <a href="https://wa.me/2348064674290" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">💬</a>
+
+  <!-- Product Modal -->
+  <div class="modal" id="product-modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+      <img id="modal-image" src="" alt="">
+      <h2 id="modal-name"></h2>
+      <p class="price" id="modal-price"></p>
+      <p id="modal-description" style="margin:1rem 0;"></p>
+      <h4>Ingredients</h4>
+      <div class="ingredients" id="modal-ingredients"></div>
+      <button class="btn-primary" id="modal-add-btn" style="margin-top:1.5rem; width:100%;">Add to Cart</button>
+    </div>
+  </div>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button onclick="closeCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cart-total">₦0</span>
+      </div>
+      <button class="whatsapp-checkout" onclick="checkoutWhatsApp()">
+        💬 Checkout via WhatsApp
+      </button>
+    </div>
+  </div>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    // Load featured products (first 6)
+    document.addEventListener('DOMContentLoaded', () => {
+      const featured = products.slice(0, 6);
+      const grid = document.getElementById('featured-products');
+      featured.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="${p.image}" alt="${p.name}" onclick="showProductModal('${p.id}')">
+          <div class="product-info">
+            <h3 onclick="showProductModal('${p.id}')">${p.name}</h3>
+            <div class="price">${formatPrice(p.price)}</div>
+            <button class="add-to-cart" onclick="addToCart('${p.id}')">Add to Cart</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>
