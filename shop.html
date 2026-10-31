@@ -26,13 +26,13 @@
   <section class="container">
     <h2 class="section-title">All Products</h2>
     <div style="text-align:center; margin-bottom:2rem;">
-      <button onclick="filterProducts('all')" class="filter-btn active" style="margin:0 0.5rem; padding:0.5rem 1rem; border:1px solid #ddd; background:#fff; border-radius:20px; cursor:pointer;">All</button>
-      <button onclick="filterProducts('Face')" class="filter-btn" style="margin:0 0.5rem; padding:0.5rem 1rem; border:1px solid #ddd; background:#fff; border-radius:20px; cursor:pointer;">Face</button>
-      <button onclick="filterProducts('Lips')" class="filter-btn" style="margin:0 0.5rem; padding:0.5rem 1rem; border:1px solid #ddd; background:#fff; border-radius:20px; cursor:pointer;">Lips</button>
-      <button onclick="filterProducts('Eyes')" class="filter-btn" style="margin:0 0.5rem; padding:0.5rem 1rem; border:1px solid #ddd; background:#fff; border-radius:20px; cursor:pointer;">Eyes</button>
-      <button onclick="filterProducts('Fragrance')" class="filter-btn" style="margin:0 0.5rem; padding:0.5rem 1rem; border:1px solid #ddd; background:#fff; border-radius:20px; cursor:pointer;">Fragrance</button>
-      <button onclick="filterProducts('Body Care')" class="filter-btn" style="margin:0 0.5rem; padding:0.5rem 1rem; border:1px solid #ddd; background:#fff; border-radius:20px; cursor:pointer;">Body Care</button>
-      <button onclick="filterProducts('Accessories')" class="filter-btn" style="margin:0 0.5rem; padding:0.5rem 1rem; border:1px solid #ddd; background:#fff; border-radius:20px; cursor:pointer;">Accessories</button>
+      <button onclick="filterProducts('all')" class="filter-btn active">All</button>
+      <button onclick="filterProducts('Face')" class="filter-btn">Face</button>
+      <button onclick="filterProducts('Lips')" class="filter-btn">Lips</button>
+      <button onclick="filterProducts('Eyes')" class="filter-btn">Eyes</button>
+      <button onclick="filterProducts('Fragrance')" class="filter-btn">Fragrance</button>
+      <button onclick="filterProducts('Body Care')" class="filter-btn">Body Care</button>
+      <button onclick="filterProducts('Accessories')" class="filter-btn">Accessories</button>
     </div>
     <div class="products-grid" id="products-grid"></div>
   </section>
@@ -110,12 +110,5 @@
       renderProducts();
     });
   </script>
-  <style>
-    .filter-btn.active {
-      background: var(--accent) !important;
-      color: white;
-      border-color: var(--accent) !important;
-    }
-  </style>
 </body>
 </html>
