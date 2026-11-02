@@ -1,156 +1,266 @@
 // Wonda Luxe Main Script
-let cart = JSON.parse(localStorage.getItem('wondaCart')) || [];
+const WHATSAPP_NUMBER = '2348064674290';
+const CART_KEY = 'wondaCart';
 
+/* ---------- Helpers ---------- */
 function formatPrice(price) {
-  return '₦' + price.toLocaleString();
+  return '₦' + Number(price).toLocaleString('en-NG');
+}
+
+function escapeHTML(str) {
+  return String(str).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+function getProduct(id) {
+  return products.find(p => p.id === id);
+}
+
+/* ---------- Cart state (stores only id + qty; details come from products.js) ---------- */
+let cart = loadCart();
+
+function loadCart() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CART_KEY));
+    if (!Array.isArray(raw)) return [];
+    return raw
+      .filter(i => i && getProduct(i.id) && Number.isInteger(i.qty) && i.qty > 0)
+      .map(i => ({ id: i.id, qty: i.qty }));
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCart() {
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  } catch (e) { /* storage unavailable (private mode) – cart still works this session */ }
+  updateCartCount();
+  renderCart();
 }
 
 function updateCartCount() {
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
   document.querySelectorAll('.cart-count').forEach(el => {
     el.textContent = count;
+    el.style.display = count > 0 ? 'flex' : 'none';
   });
 }
 
-function saveCart() {
-  localStorage.setItem('wondaCart', JSON.stringify(cart));
-  updateCartCount();
-  renderCart();
-}
-
 function addToCart(productId) {
-  const product = products.find(p => p.id === productId);
-  if (!product) return;
-  
-  const existing = cart.find(item => item.id === productId);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ ...product, qty: 1 });
-  }
+  if (!getProduct(productId)) return;
+  const existing = cart.find(i => i.id === productId);
+  if (existing) existing.qty += 1;
+  else cart.push({ id: productId, qty: 1 });
   saveCart();
   showToast('Added to cart!');
 }
 
 function removeFromCart(productId) {
-  cart = cart.filter(item => item.id !== productId);
+  cart = cart.filter(i => i.id !== productId);
   saveCart();
 }
 
 function updateQty(productId, change) {
   const item = cart.find(i => i.id === productId);
-  if (item) {
-    item.qty += change;
-    if (item.qty <= 0) {
-      removeFromCart(productId);
-    } else {
-      saveCart();
-    }
-  }
+  if (!item) return;
+  item.qty += change;
+  if (item.qty <= 0) removeFromCart(productId);
+  else saveCart();
 }
 
 function renderCart() {
-  const cartItemsEl = document.getElementById('cart-items');
-  const cartTotalEl = document.getElementById('cart-total');
-  if (!cartItemsEl) return;
+  const itemsEl = document.getElementById('cart-items');
+  const totalEl = document.getElementById('cart-total');
+  if (!itemsEl) return;
 
   if (cart.length === 0) {
-    cartItemsEl.innerHTML = '<p style="text-align:center; color:#999; padding:2rem;">Your cart is empty</p>';
-    cartTotalEl.textContent = '₦0';
+    itemsEl.innerHTML = '<p class="cart-empty">Your cart is empty</p>';
+    totalEl.textContent = formatPrice(0);
     return;
   }
 
-  let html = '';
   let total = 0;
-  cart.forEach(item => {
-    total += item.price * item.qty;
-    html += `
+  itemsEl.innerHTML = cart.map(item => {
+    const p = getProduct(item.id);
+    total += p.price * item.qty;
+    const id = escapeHTML(item.id);
+    return `
       <div class="cart-item">
-        <img src="${item.image}" alt="${item.name}">
+        <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}">
         <div class="cart-item-info">
-          <strong>${item.name}</strong>
-          <div>${formatPrice(item.price)}</div>
+          <strong>${escapeHTML(p.name)}</strong>
+          <div>${formatPrice(p.price)}</div>
           <div class="qty-controls">
-            <button onclick="updateQty('${item.id}', -1)">−</button>
+            <button type="button" aria-label="Decrease quantity" onclick="updateQty('${id}', -1)">−</button>
             <span>${item.qty}</span>
-            <button onclick="updateQty('${item.id}', 1)">+</button>
-            <button onclick="removeFromCart('${item.id}')" style="margin-left:auto; color:red; border:none; background:none;">✕</button>
+            <button type="button" aria-label="Increase quantity" onclick="updateQty('${id}', 1)">+</button>
+            <button type="button" class="remove-item" aria-label="Remove item" onclick="removeFromCart('${id}')">✕</button>
           </div>
         </div>
-      </div>
-    `;
-  });
-  cartItemsEl.innerHTML = html;
-  cartTotalEl.textContent = formatPrice(total);
+      </div>`;
+  }).join('');
+  totalEl.textContent = formatPrice(total);
 }
 
+/* ---------- Cart sidebar ---------- */
 function openCart() {
   document.getElementById('cart-sidebar').classList.add('open');
+  document.getElementById('cart-sidebar').setAttribute('aria-hidden', 'false');
+  document.getElementById('overlay').classList.add('active');
   renderCart();
 }
 
 function closeCart() {
   document.getElementById('cart-sidebar').classList.remove('open');
+  document.getElementById('cart-sidebar').setAttribute('aria-hidden', 'true');
+  if (!document.getElementById('product-modal').classList.contains('active')) {
+    document.getElementById('overlay').classList.remove('active');
+  }
 }
 
 function checkoutWhatsApp() {
   if (cart.length === 0) {
-    alert('Your cart is empty!');
+    showToast('Your cart is empty!');
     return;
   }
-  
   let message = 'Hello Wonda Luxe! I would like to order the following:\n\n';
   let total = 0;
   cart.forEach(item => {
-    const lineTotal = item.price * item.qty;
-    total += lineTotal;
-    message += `• ${item.name} x${item.qty} - ${formatPrice(lineTotal)}\n`;
+    const p = getProduct(item.id);
+    const line = p.price * item.qty;
+    total += line;
+    message += `• ${p.name} x${item.qty} - ${formatPrice(line)}\n`;
   });
   message += `\n*Total: ${formatPrice(total)}*\n\nPlease confirm availability and delivery details. Thank you!`;
-  
-  const encoded = encodeURIComponent(message);
-  const whatsappUrl = `https://wa.me/2348064674290?text=${encoded}`;
-  window.open(whatsappUrl, '_blank');
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
 }
 
+/* ---------- Product modal ---------- */
 function showProductModal(productId) {
-  const product = products.find(p => p.id === productId);
+  const product = getProduct(productId);
   if (!product) return;
-  
-  const modal = document.getElementById('product-modal');
-  document.getElementById('modal-image').src = product.image;
+
+  const img = document.getElementById('modal-image');
+  img.removeAttribute('src');          // avoid flashing the previous product's photo
+  img.src = product.image;
+  img.alt = product.name;
   document.getElementById('modal-name').textContent = product.name;
   document.getElementById('modal-price').textContent = formatPrice(product.price);
   document.getElementById('modal-description').textContent = product.description;
-  document.getElementById('modal-ingredients').textContent = product.ingredients;
+
+  const ingSection = document.getElementById('modal-ingredients-section');
+  if (product.category === 'Accessories') {
+    ingSection.style.display = 'none';
+  } else {
+    ingSection.style.display = '';
+    document.getElementById('modal-ingredients').textContent = product.ingredients;
+  }
+
   document.getElementById('modal-add-btn').onclick = () => addToCart(productId);
-  
-  modal.classList.add('active');
+  document.getElementById('product-modal').classList.add('active');
+  document.getElementById('overlay').classList.add('active');
+  document.querySelector('#product-modal .close-modal').focus();
 }
 
 function closeModal() {
   document.getElementById('product-modal').classList.remove('active');
+  if (!document.getElementById('cart-sidebar').classList.contains('open')) {
+    document.getElementById('overlay').classList.remove('active');
+  }
 }
 
+/* ---------- Product cards (shared by home + shop pages) ---------- */
+function productCardHTML(p, showCategory) {
+  const id = escapeHTML(p.id);
+  return `
+    <div class="product-card" data-id="${id}">
+      <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" loading="lazy">
+      <div class="product-info">
+        <h3><button type="button" class="title-btn">${escapeHTML(p.name)}</button></h3>
+        ${showCategory ? `<div class="product-cat">${escapeHTML(p.category)}</div>` : ''}
+        <div class="price">${formatPrice(p.price)}</div>
+        <button type="button" class="add-to-cart">Add to Cart</button>
+      </div>
+    </div>`;
+}
+
+function renderProductGrid(gridId, list, showCategory) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  grid.innerHTML = list.map(p => productCardHTML(p, showCategory)).join('');
+  if (!list.length) grid.innerHTML = '<p class="cart-empty">No products in this category yet.</p>';
+}
+
+// One delegated click handler for every card on the page
+document.addEventListener('click', (e) => {
+  const card = e.target.closest('.product-card');
+  if (!card) return;
+  const id = card.dataset.id;
+  if (e.target.closest('.add-to-cart')) addToCart(id);
+  else showProductModal(id);
+});
+
+/* ---------- Toast ---------- */
 function showToast(msg) {
   const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.setAttribute('role', 'status');
   toast.textContent = msg;
-  toast.style.cssText = `
-    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
-    background: #333; color: white; padding: 12px 24px; border-radius: 30px;
-    z-index: 9999; animation: fadeInOut 2s forwards;
-  `;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2000);
 }
 
-// Initialize
+/* ---------- Shared page chrome (modal, cart, overlay, WhatsApp button) ---------- */
+function injectChrome() {
+  const html = `
+    <a href="https://wa.me/${WHATSAPP_NUMBER}" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp" aria-label="Chat on WhatsApp">💬</a>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+      <div class="modal-content">
+        <button type="button" class="close-modal" aria-label="Close" onclick="closeModal()">&times;</button>
+        <img id="modal-image" src="" alt="">
+        <h2 id="modal-name"></h2>
+        <p class="price" id="modal-price"></p>
+        <p id="modal-description" class="modal-desc"></p>
+        <div id="modal-ingredients-section">
+          <h4>Ingredients</h4>
+          <div class="ingredients" id="modal-ingredients"></div>
+        </div>
+        <button type="button" class="btn-primary modal-add" id="modal-add-btn">Add to Cart</button>
+      </div>
+    </div>
+
+    <aside class="cart-sidebar" id="cart-sidebar" aria-label="Shopping cart" aria-hidden="true">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button type="button" class="cart-close" aria-label="Close cart" onclick="closeCart()">&times;</button>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-footer">
+        <div class="cart-total"><span>Total:</span><span id="cart-total">₦0</span></div>
+        <button type="button" class="whatsapp-checkout" onclick="checkoutWhatsApp()">💬 Checkout via WhatsApp</button>
+      </div>
+    </aside>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+/* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
+  injectChrome();
   updateCartCount();
   renderCart();
-  
-  // Close modal on outside click
-  document.getElementById('product-modal')?.addEventListener('click', (e) => {
+
+  document.getElementById('overlay').addEventListener('click', () => { closeModal(); closeCart(); });
+  document.getElementById('product-modal').addEventListener('click', (e) => {
     if (e.target.id === 'product-modal') closeModal();
   });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeModal(); closeCart(); }
+  });
+
+  if (typeof initPage === 'function') initPage();
 });

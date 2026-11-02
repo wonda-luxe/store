@@ -1,5 +1,4 @@
 /* Wonda Luxe - Matched to dova.ng colour grading & setup */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
   --primary: #FF6B00;
@@ -24,7 +23,7 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   background: var(--gray-50);
   color: var(--text);
   line-height: 1.6;
@@ -490,4 +489,53 @@ footer {
   .product-card img {
     height: 150px;
   }
+}
+
+/* ---------- Fixes & additions ---------- */
+.cart-count { display: none; }
+
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1400;
+}
+.overlay.active { display: block; }
+.modal { z-index: 2000; background: transparent; }
+.modal.active { background: transparent; }
+
+.title-btn {
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+}
+.title-btn:hover { color: var(--primary); }
+.product-card img { cursor: pointer; }
+.product-card:focus-within { box-shadow: 0 0 0 2px var(--primary); }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+.product-cat { color: #999; font-size: 0.85rem; margin-bottom: 0.3rem; }
+.modal-desc { margin: 1rem 0; }
+.modal-add { margin-top: 1.5rem; width: 100%; }
+.cart-empty { text-align: center; color: #999; padding: 2rem; grid-column: 1 / -1; }
+.cart-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+.remove-item { margin-left: auto; color: red; border: none !important; background: none !important; }
+.filters { text-align: center; margin-bottom: 2rem; }
+.filter-btn { margin-bottom: 0.5rem; }
+.footer-link { color: inherit; text-decoration: underline; }
+
+.toast {
+  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+  background: #333; color: white; padding: 12px 24px; border-radius: 30px;
+  z-index: 9999; animation: fadeInOut 2s forwards;
+}
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, 10px); }
+  15%, 85% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, 0); }
 }

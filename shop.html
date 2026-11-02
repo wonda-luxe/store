@@ -4,20 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop | Wonda Luxe</title>
+  <meta name="description" content="Wonda Luxe – luxury cosmetics, skincare and fragrances in Abuja, Nigeria. Order easily via WhatsApp.">
+  <meta property="og:title" content="Wonda Luxe | Luxury Cosmetics &amp; Fragrances">
+  <meta property="og:description" content="Premium cosmetics, skincare and fragrances. Checkout via WhatsApp.">
+  <meta property="og:image" content="assets/images/571955.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💄%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <header>
     <div class="navbar">
       <a href="index.html" class="logo">Wonda <span>Luxe</span></a>
-      <nav>
+      <nav aria-label="Main">
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="shop.html">Shop</a></li>
           <li><a href="index.html#contact">Contact</a></li>
         </ul>
       </nav>
-      <button class="cart-btn" onclick="openCart()">
+      <button type="button" class="cart-btn" onclick="openCart()" aria-label="Open cart">
         🛒 Cart <span class="cart-count">0</span>
       </button>
     </div>
@@ -25,90 +33,45 @@
 
   <section class="container">
     <h2 class="section-title">All Products</h2>
-    <div style="text-align:center; margin-bottom:2rem;">
-      <button onclick="filterProducts('all')" class="filter-btn active">All</button>
-      <button onclick="filterProducts('Face')" class="filter-btn">Face</button>
-      <button onclick="filterProducts('Lips')" class="filter-btn">Lips</button>
-      <button onclick="filterProducts('Eyes')" class="filter-btn">Eyes</button>
-      <button onclick="filterProducts('Fragrance')" class="filter-btn">Fragrance</button>
-      <button onclick="filterProducts('Body Care')" class="filter-btn">Body Care</button>
-      <button onclick="filterProducts('Accessories')" class="filter-btn">Accessories</button>
+    <div class="filters" id="filters">
+      <button type="button" class="filter-btn active" data-cat="all">All</button>
+      <button type="button" class="filter-btn" data-cat="Face">Face</button>
+      <button type="button" class="filter-btn" data-cat="Lips">Lips</button>
+      <button type="button" class="filter-btn" data-cat="Eyes">Eyes</button>
+      <button type="button" class="filter-btn" data-cat="Fragrance">Fragrance</button>
+      <button type="button" class="filter-btn" data-cat="Body Care">Body Care</button>
+      <button type="button" class="filter-btn" data-cat="Accessories">Accessories</button>
     </div>
     <div class="products-grid" id="products-grid"></div>
   </section>
 
   <footer>
     <p>&copy; 2026 Wonda Luxe. All rights reserved.</p>
-    <p>WhatsApp: 08064674290</p>
+    <p>WhatsApp: <a class="footer-link" href="tel:+2348064674290">08064674290</a></p>
+    <p>Abuja, Nigeria</p>
   </footer>
-
-  <a href="https://wa.me/2348064674290" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">💬</a>
-
-  <!-- Product Modal -->
-  <div class="modal" id="product-modal">
-    <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()">&times;</button>
-      <img id="modal-image" src="" alt="">
-      <h2 id="modal-name"></h2>
-      <p class="price" id="modal-price"></p>
-      <p id="modal-description" style="margin:1rem 0;"></p>
-      <h4>Ingredients</h4>
-      <div class="ingredients" id="modal-ingredients"></div>
-      <button class="btn-primary" id="modal-add-btn" style="margin-top:1.5rem; width:100%;">Add to Cart</button>
-    </div>
-  </div>
-
-  <!-- Cart Sidebar -->
-  <div class="cart-sidebar" id="cart-sidebar">
-    <div class="cart-header">
-      <h3>Your Cart</h3>
-      <button onclick="closeCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
-    </div>
-    <div class="cart-items" id="cart-items"></div>
-    <div class="cart-footer">
-      <div class="cart-total">
-        <span>Total:</span>
-        <span id="cart-total">₦0</span>
-      </div>
-      <button class="whatsapp-checkout" onclick="checkoutWhatsApp()">
-        💬 Checkout via WhatsApp
-      </button>
-    </div>
-  </div>
-
   <script src="assets/js/products.js"></script>
   <script src="assets/js/main.js"></script>
   <script>
-    function renderProducts(filter = 'all') {
-      const grid = document.getElementById('products-grid');
-      grid.innerHTML = '';
-      const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-      
-      filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-          <img src="${p.image}" alt="${p.name}" onclick="showProductModal('${p.id}')">
-          <div class="product-info">
-            <h3 onclick="showProductModal('${p.id}')">${p.name}</h3>
-            <div style="color:#999; font-size:0.85rem; margin-bottom:0.3rem;">${p.category}</div>
-            <div class="price">${formatPrice(p.price)}</div>
-            <button class="add-to-cart" onclick="addToCart('${p.id}')">Add to Cart</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
     function filterProducts(cat) {
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      renderProducts(cat);
+      const list = cat === 'all' ? products : products.filter(p => p.category === cat);
+      renderProductGrid('products-grid', list, true);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderProducts();
-    });
+    function initPage() {
+      const filters = document.getElementById('filters');
+      filters.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        filters.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterProducts(btn.dataset.cat);
+        history.replaceState(null, '', btn.dataset.cat === 'all' ? 'shop.html' : '#' + encodeURIComponent(btn.dataset.cat));
+      });
+      const hash = decodeURIComponent(location.hash.slice(1));
+      const start = hash && document.querySelector(`.filter-btn[data-cat="${hash}"]`);
+      if (start) start.click(); else filterProducts('all');
+    }
   </script>
 </body>
 </html>

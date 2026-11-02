@@ -25,7 +25,7 @@ const products = [
     price: 4500,
     image: "assets/images/571974.jpg",
     description: "Specialized heel crack cream enriched with Allantoin to repair and soften dry, cracked, and rough heels. Provides intensive hydration and visible improvement with regular use. Suitable for dry and calloused feet.",
-    ingredients: "Aqua, Urea, Glycerin, Caprylic/Capric Triglyceride, Cetearyl Alcohol, Panthenol, Allantoin, Tocopheryl Acetate, Aloe Barbadensis Leaf Extract, Dimethicone, Carbomer, Triethanolamine, Parfum, and other moisturizing agents. (Formulated with Allantoin for cracked heels.)"
+    ingredients: "Aqua, Urea, Glycerin, Caprylic/Capric Triglyceride, Cetearyl Alcohol, Panthenol, Allantoin, Tocopheryl Acetate, Aloe Barbadensis Leaf Extract, Dimethicone, Carbomer, Triethanolamine, Parfum, and other moisturizing agents. (Formulated with Allantoin for cracked heels.) (Check product packaging for the full ingredient list.)"
   },
   {
     id: "sheglam-oil-control-powder",
@@ -52,7 +52,7 @@ const products = [
     price: 6200,
     image: "assets/images/571969.jpg",
     description: "Versatile 4-shade eyeshadow palette with matte and highly glittery finishes. Perfect for everyday and glam looks. Features warm bronze, gold, and shimmer shades that blend seamlessly.",
-    ingredients: "Mica, Talc, Synthetic Fluorphlogopite, Silica, Dimethicone, Caprylic/Capric Triglyceride, Phenoxyethanol, Tin Oxide, and colorants (Iron Oxides, Titanium Dioxide, Ultramarines, etc.). Glitter shades contain light-reflecting particles."
+    ingredients: "Mica, Talc, Synthetic Fluorphlogopite, Silica, Dimethicone, Caprylic/Capric Triglyceride, Phenoxyethanol, Tin Oxide, and colorants (Iron Oxides, Titanium Dioxide, Ultramarines, etc.). Glitter shades contain light-reflecting particles. (Check product packaging for the full ingredient list.)"
   },
   {
     id: "loreal-true-match-c6",
@@ -106,7 +106,7 @@ const products = [
     price: 18500,
     image: "assets/images/571964.jpg",
     description: "Exclusive set featuring Maison Asrar perfume, Zandas Sugar Radio perfume body spray, and Genie's Secret Bombshell Seduction eau de parfum. A mix of elegant and seductive scents.",
-    ingredients: "Alcohol Denat., Parfum/Fragrance, Aqua, and other fragrance compounds. Individual notes vary by bottle (oriental, sweet, floral)."
+    ingredients: "Alcohol Denat., Parfum/Fragrance, Aqua, and other fragrance compounds. Individual notes vary by bottle (oriental, sweet, floral). (Check product packaging for the full ingredient list.)"
   },
   {
     id: "arabic-perfume-set",
@@ -115,7 +115,7 @@ const products = [
     price: 15000,
     image: "assets/images/571965.jpg",
     description: "Premium Arabic-style eau de parfum set in elegant packaging with traditional design elements. Long-lasting oriental fragrances.",
-    ingredients: "Alcohol Denat., Parfum, Aqua, and proprietary fragrance oils typical of Arabic perfumery (oud, musk, floral notes)."
+    ingredients: "Alcohol Denat., Parfum, Aqua, and proprietary fragrance oils typical of Arabic perfumery (oud, musk, floral notes). (Check product packaging for the full ingredient list.)"
   },
   {
     id: "kaylia-summer-set",
@@ -124,7 +124,7 @@ const products = [
     price: 12000,
     image: "assets/images/571963.jpg",
     description: "Delightful summer scent collection including My Her Fragrance Deluxe, Sugar Candy Body Mist, and Kaylia Vanilla. Fresh, sweet, and playful fragrances.",
-    ingredients: "Alcohol Denat., Parfum, Aqua, Glycerin (for mists). Notes include vanilla, candy, floral."
+    ingredients: "Alcohol Denat., Parfum, Aqua, Glycerin (for mists). Notes include vanilla, candy, floral. (Check product packaging for the full ingredient list.)"
   },
   {
     id: "cocktail-kaylia-set",
@@ -132,8 +132,8 @@ const products = [
     category: "Fragrance",
     price: 13500,
     image: "assets/images/571962.jpg",
-    description: "Bold fragrance set featuring Cocktail Intense eau de parfum, Suger X Chrome body spray, and Kaylia Elixir. Intense and sophisticated scents.",
-    ingredients: "Alcohol Denat., Parfum/Fragrance, Aqua. Concentrated perfume oils."
+    description: "Bold fragrance set featuring Cocktail Intense eau de parfum, Sugar X Chrome body spray, and Kaylia Elixir. Intense and sophisticated scents.",
+    ingredients: "Alcohol Denat., Parfum/Fragrance, Aqua. Concentrated perfume oils. (Check product packaging for the full ingredient list.)"
   },
   {
     id: "ashantee-armaf-set",
@@ -142,7 +142,7 @@ const products = [
     price: 16000,
     image: "assets/images/571961.jpg",
     description: "Tropical and floral fragrance collection: Ashantee Floral (L'Amour à Paris), Armaf Island Bliss Delight, and Now Diva. Perfect for summer vibes.",
-    ingredients: "Alcohol Denat., Parfum, Aqua. Notes include floral, fruity, and fresh accords."
+    ingredients: "Alcohol Denat., Parfum, Aqua. Notes include floral, fruity, and fresh accords. (Check product packaging for the full ingredient list.)"
   },
   {
     id: "amd-oud-6000",
@@ -151,7 +151,7 @@ const products = [
     price: 22000,
     image: "assets/images/571958.jpg",
     description: "Luxurious oud fragrance with main accords of oud, warm spicy, rose, smoky, woody, white floral, leather, fresh spicy, citrus, and floral. Elegant bottle with gold detailing.",
-    ingredients: "Alcohol Denat., Parfum, Aqua. Rich in oud, rose, spices, and woody notes."
+    ingredients: "Alcohol Denat., Parfum, Aqua. Rich in oud, rose, spices, and woody notes. (Check product packaging for the full ingredient list.)"
   },
   {
     id: "venom-incarnat",
@@ -160,7 +160,7 @@ const products = [
     price: 45000,
     image: "assets/images/571955.jpg",
     description: "Exclusive niche fragrance from Stephane Humbert Lucas Paris. Bold and captivating scent presented in a striking red bottle with ornate design. 60ml / 1.7 fl.oz.",
-    ingredients: "Alcohol Denat., Parfum, Aqua. Proprietary niche fragrance composition."
+    ingredients: "Alcohol Denat., Parfum, Aqua. Proprietary niche fragrance composition. (Check product packaging for the full ingredient list.)"
   },
   {
     id: "wild-card-lipstick",
@@ -169,7 +169,7 @@ const products = [
     price: 3500,
     image: "assets/images/571977.jpg",
     description: "Intense matte red lipstick in shade 004 Wild Card. Provides bold, long-lasting color with a velvety matte finish. Perfect for statement looks.",
-    ingredients: "Isododecane, Dimethicone, Silica, Synthetic Wax, and colorants (CI 15850, CI 77491, etc.). Long-wear matte formula."
+    ingredients: "Isododecane, Dimethicone, Silica, Synthetic Wax, and colorants (CI 15850, CI 77491, etc.). Long-wear matte formula. (Check product packaging for the full ingredient list.)"
   }
 ];
 
